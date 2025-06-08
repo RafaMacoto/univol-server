@@ -49,19 +49,14 @@ O **UniVol** é uma API REST inovadora desenvolvida para conectar voluntários c
 
 ## Como Executar o Projeto Localmente
 
-1. Clone o repositório:
    ```bash
    git clone https://github.com/seuusuario/univol-server.git
    cd univol-server
-Configure a string de conexão Oracle no appsettings.json:
-
 
 "ConnectionStrings": {
   "UniVolConnection": "User Id=seu_usuario;Password=sua_senha;Data Source=seu_data_source"
 }
-Atualize o banco de dados com as migrations:
 
-```bash
 dotnet ef database update
 Execute a API:
 
@@ -69,7 +64,11 @@ Execute a API:
 dotnet run
 Acesse a documentação Swagger em: https://localhost:5001/swagger
 
+
 ```
+
+
+
 
 ## Avaliação
 Este projeto atende aos critérios de:
