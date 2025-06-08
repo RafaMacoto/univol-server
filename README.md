@@ -61,7 +61,7 @@ Configure a string de conexão Oracle no appsettings.json:
 }
 Atualize o banco de dados com as migrations:
 
-
+```bash
 dotnet ef database update
 Execute a API:
 
@@ -69,7 +69,9 @@ Execute a API:
 dotnet run
 Acesse a documentação Swagger em: https://localhost:5001/swagger
 
-Avaliação
+```
+
+## Avaliação
 Este projeto atende aos critérios de:
 
 Viabilidade e inovação: uma solução focada em auxiliar crises reais com resposta rápida e organização eficiente.
