@@ -1,78 +1,186 @@
-# UniVol - API
+# 🌐 ConectaVoluntário Express - API REST
 
-## Visão Geral
+API REST desenvolvida em .NET 9 com Oracle para conectar voluntários a demandas emergenciais registradas por **organizações** em situações críticas como desastres naturais, crises ambientais ou emergências comunitárias.
 
-O **UniVol** é uma API REST inovadora desenvolvida para conectar voluntários com demandas emergenciais em situações de desastres naturais e crises ambientais. A plataforma visa agilizar a resposta a eventos críticos, facilitando a comunicação entre organizações, líderes comunitários e voluntários capacitados.
-
----
-
-## Funcionalidades Principais
-
-- Cadastro de **Pedidos** de ajuda emergencial publicados por organizações e líderes comunitários.
-- Cadastro e gerenciamento de **Voluntários** com suas habilidades e localização.
-- Classificação automática dos pedidos por prioridade (Baixa, Média, Alta) via modelo de Machine Learning (simulado).
-- Voluntários podem demonstrar interesse em pedidos e iniciar contato via WhatsApp.
-- Persistência em banco de dados Oracle com migrações EF Core.
-- Documentação da API disponibilizada via Swagger.
+> Projeto acadêmico da disciplina **Advanced Business Development with .NET**
 
 ---
 
-## Requisitos Técnicos Atendidos
+## 🎯 Objetivo
 
-- API REST seguindo boas práticas de programação e arquitetura (camadas Models, Repositories, Services, Controllers).
-- Persistência em banco de dados relacional Oracle.
-- Relacionamento 1:N implementado entre Voluntário e Pedidos.
-- Documentação completa da API com Swagger.
-- Uso correto das migrations para versionamento e controle do banco de dados.
+Criar uma **solução inovadora** que facilite o registro de pedidos de ajuda por **organizações**, permitindo a atuação mais ágil e eficiente da sociedade em momentos críticos. Os **voluntários** são cadastrados apenas como possíveis perfis para ações futuras — sem relação direta com pedidos.
 
 ---
 
-## Tecnologias Utilizadas
+## ✅ Requisitos Atendidos
 
-- .NET 9 (ASP.NET Core)
-- Entity Framework Core (com Oracle provider)
-- Swagger / OpenAPI para documentação
-- Oracle Database
-- C# 11
-
----
-
-## Estrutura do Projeto
-
-- **Models**: definição das entidades e enums.
-- **Repositories**: abstração da persistência.
-- **Services**: regras de negócio e lógica de aplicação.
-- **Controllers**: endpoints REST.
-- **Migrations**: scripts gerados pelo EF Core para criação e atualização do banco.
+- [x] API REST estruturada com boas práticas de arquitetura (Models, Services, Repositories, Controllers)
+- [x] Persistência com **Oracle DB** usando **EF Core**
+- [x] Relacionamento **1:N** → `Organizacao` → `Pedido`
+- [x] Uso correto de **Migrations**
+- [x] Documentação com **Swagger**
+- [x] Projeto hospedado no GitHub com instruções completas e testes
 
 ---
 
-## Como Executar o Projeto Localmente
+## 🗂️ Estrutura de Pastas
 
-   ```bash
-   git clone https://github.com/seuusuario/univol-server.git
-   cd univol-server
+```
+univol-server/
+│
+├── Controllers/         # Endpoints da API
+├── Models/              # Entidades (Organizacao, Pedido, Voluntario)
+├── Services/            # Lógica de negócio
+├── Data/                # DbContext + FluentAPI
+├── Migrations/          # Histórico de banco
+├── appsettings.json     # Configuração do Oracle
+└── Program.cs           # Bootstrap da aplicação
+```
 
-"ConnectionStrings": {
-  "UniVolConnection": "User Id=seu_usuario;Password=sua_senha;Data Source=seu_data_source"
+---
+
+## 🧭 Diagrama de Entidades
+
+```mermaid
+classDiagram
+    class Organizacao {
+        +Guid Id
+        +string Nome
+        +string Contato
+        +List~Pedido~ Pedidos
+    }
+
+    class Pedido {
+        +Guid Id
+        +string Titulo
+        +string Descricao
+        +DateTime DataCriacao
+        +PrioridadeEnum Prioridade
+        +Guid OrganizacaoId
+    }
+
+    class Usuario {
+        +Guid Id
+        +string Nome
+        +string Telefone
+        +string Localizacao
+        +List~string~ Habilidades
+    }
+
+    Organizacao "1" --> "many" Pedido
+```
+
+---
+
+## 🧪 Exemplos de Requisições
+
+### Criar Organização
+
+```http
+POST /api/organizacoes
+Content-Type: application/json
+
+{
+  "nome": "Defesa Civil",
+  "contato": "contato@defesacivil.gov"
 }
+```
 
+### Criar Pedido (por Organização)
+
+```http
+POST /api/pedido
+Content-Type: application/json
+
+{
+  "titulo": "Distribuição de água",
+  "descricao": "Precisamos distribuir água em área alagada",
+  "prioridade": "Alta",
+  "DataCriacao": "2023-10-05"
+  "organizacaoId": "ID_DA_ORGANIZACAO"
+}
+```
+
+### Criar Voluntário
+
+```http
+POST /api/usuario
+Content-Type: application/json
+
+{
+  "nome": "Rafael Macoto",
+  "telefone": "rafael@example.com",
+  "Localizacao": "SP",
+  "habilidades": ["Logística", "Primeiros Socorros"]
+}
+```
+
+---
+
+## ⚙️ Como Rodar o Projeto
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/seuusuario/univol-server.git
+cd univol-server
+```
+
+### 2. Configure a string de conexão no `appsettings.json`
+
+```json
+"ConnectionStrings": {
+  "UniVolConnection": "User Id=SEU_USUARIO;Password=SUA_SENHA;Data Source=SEU_SERVIDOR"
+}
+```
+
+### 3. Execute as migrations
+
+```bash
 dotnet ef database update
+```
 
+### 4. Rode a aplicação
+
+```bash
 dotnet run
+```
 
-````
-Acesse a documentação Swagger em: https://localhost:5001/swagger
+### 5. Acesse o Swagger
+
+```
+https://localhost:5001/swagger
+```
+
+---
+
+## 🧪 Testes e Validações
+
+- Testes manuais realizados via Swagger
+- Verificação de:
+  - Criação de entidades
+  - Relacionamentos funcionando
+- Validação de regras como:
+  - Campos obrigatórios
+  - Tipagem dos dados
+  - Relacionamento entre `Pedido` e `Organizacao`
+
+---
+
+## 📘 Documentação
+
+Disponível automaticamente em:
+
+```
+https://localhost:5001/swagger
+```
 
 
 
+## 👥 Autores
 
+- Rafael Macoto  
+- Gabrielly Macedo
+- Fernando Aguiar
 
-## Avaliação
-Este projeto atende aos critérios de:
-
-Viabilidade e inovação: uma solução focada em auxiliar crises reais com resposta rápida e organização eficiente.
-
-Cumprimento técnico: implementação robusta com arquitetura em camadas, banco relacional, relacionamento 1:N, documentação e migrations.
-
-Documentação: Swagger e README completos, com instruções claras para uso e desenvolvimento.
+---
