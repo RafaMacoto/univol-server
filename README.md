@@ -58,14 +58,12 @@ O **UniVol** é uma API REST inovadora desenvolvida para conectar voluntários c
 }
 
 dotnet ef database update
-Execute a API:
-
 
 dotnet run
+
+````
 Acesse a documentação Swagger em: https://localhost:5001/swagger
 
-
-```
 
 
 
